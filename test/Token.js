@@ -6,12 +6,16 @@ const tokens = (n) => {
 }
 
 describe('Token', () => {
-	let token
+	let token,
+		accounts,
+		deployer
 //making the token avaiable for the tests
 	beforeEach(async () => {
 	//fetch token from blockchain/ deploy
 	const Token = await ethers.getContractFactory('Token')
 	token = await Token.deploy('Sergio token', 'SSR', '1000000' )
+	accounts = await ethers.getSigners()
+	deployer = accounts[0]
 	})
 
 describe('Deployment',() => {
@@ -25,13 +29,14 @@ const totalsupply = tokens(1000000)
 
 it('has the correct name', async ()=> {expect(await token.name()).to.equal('Sergio token')
 })
-
 it('has the correct symbol', async ()=> {expect(await token.symbol()).to.equal(symbol)
 })
 it('has the correct decimals', async ()=> {expect(await token.decimals()).to.equal(decimals)
 })
-
 it('has the correct total supply', async ()=> {expect(await token.totalSupply()).to.equal(totalsupply)
+})
+//console.log(ethers.utils.getAddress(deployer.address.toString()))
+it('assigns total supply to deployer', async ()=> {expect(await token.balanceOf(deployer.address)).to.equal(totalsupply)
 })
 
 })
