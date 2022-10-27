@@ -10,7 +10,8 @@ describe('Token', () =>
 	let token,
 		accounts,
 		deployer,
-		receiver
+		receiver,
+		exchange
 //making the token avaiable for the tests
 	beforeEach(async () => {
 	//fetch token from blockchain/ deploy
@@ -19,6 +20,7 @@ describe('Token', () =>
 	accounts = await ethers.getSigners()
 	deployer = accounts[0]
 	receiver = accounts[1]
+	exchange = accounts[2]
 	})
 
 describe('Deployment',() => 
@@ -88,10 +90,45 @@ describe('Sending tokens', () => {
       	})
 
 	})
-
 })
-	
-	
+})
+
+describe ('Approving tokens', () => {
+	let amount, transaction, result
+	beforeEach(async () => {
+		amount = tokens(100)
+		transaction = await token.connect(deployer).approve(exchange.address, amount)
+		result = await transaction.wait()
+	})
+
+	describe ('Success', () => {
+		it('allocates an allowance for delegated token spending', async () => {
+			expect(await token.allowance(deployer.address, exchange.address)).to.equal(amount)
+		})
+
+		it('emits an Approval event', async () => {
+			const eventlog = result.events[0]
+			//console.log(eventlog)
+			expect(eventlog.event).to.equal('Approval')
+			const args = eventlog.args
+			//console.log(args)
+			expect(args.owner).to.equal(deployer.address) 
+			//compares line 'from' in the eventlog to deployer address
+			expect(args.to).to.equal(exchange.address)
+			expect(args.value).to.equal(amount)
+		})
+
+	})
+	describe ('Failure', () => {
+		it('rejects invalid spender', async () => {
+        const amount = tokens(100)
+        await expect(token.connect(deployer).approve('0x0000000000000000000000000000000000000000', amount)).to.be.reverted
+      	})
+
+
+	})
+
+
 })
 
 })

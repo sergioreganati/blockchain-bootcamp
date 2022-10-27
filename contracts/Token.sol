@@ -12,11 +12,18 @@ contract Token {
 	uint256 public totalSupply;
 	//track balances - state
 	mapping(address => uint256) public balanceOf; //gets the keypar mapps the address to the balance
+	//owner address, approval addresses
+	mapping(address => mapping(address => uint256)) public allowance;
 
 	event Transfer(
 		address indexed from, 
 		address indexed to, 
 		uint256 value
+	);
+	event Approval(
+		address indexed owner,
+		address indexed to,
+		uint256	value
 	);
 
 	//send tokens - 
@@ -49,4 +56,22 @@ contract Token {
 		return true;
 	}
 
+	//create function for users to excange tokens
+
+
+	//allow spender/dex
+
+
+
+function approve(address _spender, uint256 _value) 
+	public
+	returns(bool success)
+{
+	require(_spender != address(0));
+	allowance[msg.sender][_spender] = _value;
+
+	emit Approval(msg.sender, _spender, _value);
+	return true;
+
+}
 }
