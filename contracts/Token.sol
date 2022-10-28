@@ -36,7 +36,6 @@ contract Token {
 	name = _name;
 	symbol = _symbol;
 	totalSupply = _totalsupply * (10**decimals);
-	//create the tokens with the ownership of the creator/sender of the token, writtes info on the blockchain
 	balanceOf[msg.sender] = totalSupply; 
 	}
 
@@ -44,21 +43,23 @@ contract Token {
 	public 
 	returns (bool success)
 	{
-		//require that senders token has enough tokens to spend
 		require(balanceOf[msg.sender] >= _value);
-		require(_to != address(0));
-		//deduct tokens from spender
-		balanceOf[msg.sender] = balanceOf[msg.sender] - _value;
-		//credit tokens to receiver
-		balanceOf[_to] = balanceOf[_to] + _value;
-		//emitt event
-		emit Transfer(msg.sender, _to, _value);
+		
+		_transfer(msg.sender, _to, _value);
 		return true;
 	}
 
-	//create function for users to excange tokens
+	//create function for transfer and trasnferfrom
+	function _transfer (address _from, 
+		address _to, 
+		uint256 _value
+		) internal {
+		require(_to != address(0));
+		balanceOf[_from] = balanceOf[_from] - _value;
+		balanceOf[_to] = balanceOf[_to] + _value;
+		emit Transfer(_from, _to, _value);
 
-
+	}
 	//allow spender/dex
 
 
@@ -72,6 +73,34 @@ function approve(address _spender, uint256 _value)
 
 	emit Approval(msg.sender, _spender, _value);
 	return true;
+}
+
+function transferfrom( address _from, address _to, uint256 _value)
+	public 
+	returns (bool success)
+{
+	require	(_from != address(0));
+	require	(_to != address(0));
+	require	(_value > 0);
+	require (_value <= allowance[_from][msg.sender]);
+	require (_value <= balanceOf[_from]);
+	
+	allowance[_from][msg.sender] = allowance[_from][msg.sender] - _value;
+
+	_transfer(_from, _to, _value);
+
+	return true;
+	
+
+
+		
+
+
+
+
+
 
 }
+
+
 }

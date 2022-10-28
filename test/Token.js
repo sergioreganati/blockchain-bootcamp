@@ -131,5 +131,52 @@ describe ('Approving tokens', () => {
 
 })
 
+
+	describe('Delegated Toker Transfer', () => {
+		let amount, transaction, result
+		beforeEach(async () => {
+			amount = tokens(100)
+			transaction = await token.connect(deployer).approve(exchange.address, amount)
+			result = await transaction.wait()
+		})
+
+		describe('Success', () => {
+			beforeEach(async () => {
+				amount = tokens(100)
+				transaction = await token.connect(exchange).transferfrom(deployer.address, receiver.address, amount)
+				result = await transaction.wait()
+			})
+
+			it('Transfers token balances', async () => {
+				expect (await token.balanceOf(deployer.address)).to.equal(tokens(999900))
+				expect (await token.balanceOf(receiver.address)).to.equal(amount)
+			})
+
+			it('Resets the allowance', async () => {
+				expect(await token.allowance(deployer.address, exchange.address)).to.equal(0)
+			})
+			it('Emmits a Transfer event', async () => {
+				const eventlog = result.events[0]
+				//console.log(eventlog)
+				expect(eventlog.event).to.equal('Transfer')
+				const args = eventlog.args
+				expect(args.from).to.equal(deployer.address) 
+				//compares line 'from' in the eventlog to deployer address
+				expect(args.to).to.equal(receiver.address)
+				expect(args.value).to.equal(amount)
+			} )
+
+		})
+		describe('Failure', () => {
+			const invalidamount = tokens(1000001)
+			it ('Rejects invalid amount', async () => { 
+				await expect(token.connect(exchange).transferfrom(deployer.address, receiver.address, invalidamount)).to.be.reverted
+
+			})
+		})
+
+
+	})
+
 })
 
