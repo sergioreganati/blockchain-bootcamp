@@ -82,8 +82,8 @@ function transferfrom( address _from, address _to, uint256 _value)
 	require	(_from != address(0));
 	require	(_to != address(0));
 	require	(_value > 0);
-	require (_value <= allowance[_from][msg.sender]);
-	require (_value <= balanceOf[_from]);
+	require (_value <= allowance[_from][msg.sender], 'Insufficient allowance');
+	require (_value <= balanceOf[_from], 'Insufficient balance');
 	
 	allowance[_from][msg.sender] = allowance[_from][msg.sender] - _value;
 
