@@ -9,15 +9,18 @@ const tokens = (n) => {
 describe('Exchange', () => {
 	let deployer,
 		feeAccount,
-		exchange
+		exchange,
+		token1
 		
 	const feePercent = 10
 
-//making the token avaiable for the tests
+	//making the token avaiable for the tests
 	beforeEach(async () => {
 		const Exchange = await ethers.getContractFactory('Exchange')
 		const Token = await ethers.getContractFactory('Token')
+		
 		token1 = await Token.deploy('Sergio token', 'SSR', '1000000')
+		token2 = await Token.deploy('Mock Dai', 'mDai', '1000000')
 
 		accounts = await ethers.getSigners()
 		deployer = accounts[0]
@@ -42,8 +45,6 @@ describe('Exchange', () => {
 
 		let transaction, result
 		let amount = tokens(10)
-
-
 
 		describe('Success', () => {
 
@@ -109,11 +110,11 @@ describe('Exchange', () => {
 			result = await transaction.wait()
 
 		})
-
+		
 			it ('Withdraw token funds', async () => {
-				expect(await token1.balanceOf(exchange.address)).to.equal(0)
 				//console.log(await exchange.tokens(token1.address, user1.address))
 				expect(await exchange.tokens(token1.address, user1.address)).to.equal(0)
+				expect(await token1.balanceOf(exchange.address)).to.equal(0)
 				expect(await exchange.balanceOf(token1.address, user1.address)).to.equal(0)		
 			})
 			it('emits a Withdraw event', async () => {
@@ -129,29 +130,24 @@ describe('Exchange', () => {
 			})
 
 
-
 		})
 
 		describe('Failure', () => {
 			it('Fails for insufficient balance', async () => {
 			
-
 				await expect(exchange.connect(user1).withdrawToken(token1.address, amount)).to.be.reverted
-
+				
 			})
 
 		})
-
+		
 	})
 
-
-
-describe('Checking Balances', () => {
+	describe('Checking Balances', () => {
 
 		let transaction, result
 		let amount = tokens(1)
-
-
+		
 		beforeEach(async () => {
 			//approve tokens
 			transaction = await token1.connect(user1).approve(exchange.address, amount)
@@ -160,16 +156,67 @@ describe('Checking Balances', () => {
 			transaction = await exchange.connect(user1).depositToken(token1.address, amount)
 			result = await transaction.wait()
 		})
-
-			it ('returns the user balance', async () => {
-				expect(await token1.balanceOf(exchange.address)).to.equal(amount)
-						
-			})
+		
+		it ('returns the user balance', async () => {
+			expect(await token1.balanceOf(exchange.address)).to.equal(amount)
 			
+		})
+		
+		
+	})
+	
+	describe('Making orders', () => {
+
+		let transaction, result
+		let amount = tokens(1)
+		
+		describe('Success', async () => {
+			beforeEach(async () => {
+			//approve tokens
+			transaction = await token1.connect(user1).approve(exchange.address, amount)
+			result = await transaction.wait()
+			//deposit tokens
+			transaction = await exchange.connect(user1).depositToken(token1.address, amount)
+			result = await transaction.wait()
+			//make order
+			transaction = await exchange.connect(user1).makeOrder(token2.address, tokens(1), token1.address, tokens(1))
+			result = await transaction.wait()
+			
+			})
+			it('tracks the newly created order', async () => {
+				expect(await exchange.ordersCount()).to.equal(1)
+			})
+			it('emits an order event', async () => {
+				const eventlog = result.events[0]
+				//console.log(eventlog.args)
+				expect(eventlog.event).to.equal('Order')
+				const args = eventlog.args
+				expect(args.id).to.equal(1) 
+				//compares line 'from' in the eventlog to deployer address
+				expect(args.user).to.equal(user1.address)
+				expect(args.tokenGet).to.equal(token2.address)
+				expect(args.amountGet).to.equal(tokens(1))
+				expect(args.tokenGive).to.equal(token1.address)
+				expect(args.amountGive).to.equal(tokens(1))
+				expect(args.timeStamp).to.at.least(1)
+
+
+			})
+
+		})
+
+		describe('Failure', async () => {
+			beforeEach(async () => {
+				
+			})
+			it('rejects create order with insufficient balance', async () => {
+				await expect(exchange.connect(user1).makeOrder(token2.address, tokens(1), token1.address, tokens(1))).to.be.reverted
+			})
+
+		})		
+		
+	})
+	
+
 })
-
-
-
-
-})
-
+	
