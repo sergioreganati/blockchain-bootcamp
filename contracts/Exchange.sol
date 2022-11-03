@@ -10,6 +10,7 @@ contract Exchange {
 
 	mapping(address => mapping(address => uint256)) public tokens;
 	mapping(uint256 => _Order) public orders;
+	mapping(uint256 => bool) public orderCancelled;
 
 	uint256 public ordersCount;
 
@@ -23,7 +24,19 @@ contract Exchange {
 		address tokenGive,
 		uint256 amountGive,
 		uint256 timeStamp
-);
+	);
+
+	event Cancel (		
+		uint256 id,
+		address user,
+		address tokenGet,
+		uint256 amountGet,
+		address tokenGive,
+		uint256 amountGive,
+		uint256 timeStamp
+	);
+
+
 	struct _Order {
 		uint256 id;
 		address user;
@@ -95,14 +108,28 @@ uint256 _amountGive) public {
 		_tokenGive, 
 		_amountGive, 
 		block.timestamp);
-
-
 //Token give - token to be spent which token and how much
-
 //Token get - token to be receive which token and how much
-
 }
 
+function cancelOrder(uint256 _id) public {
+	//fetch the order _Order is the structure created, _order local var
+	_Order storage _order = orders[_id];
+	//cancel order
+	orderCancelled[_id] = true;
+	require(_order.id == _id);
+	require(address(_order.user) == msg.sender);
+	emit Cancel(
+		_order.id, 
+		msg.sender, 
+		_order.tokenGet,
+		_order.amountGet, 
+		_order.tokenGive, 
+		_order.amountGive, 
+		block.timestamp);
+	//update oders
+
+}
 
 
 
