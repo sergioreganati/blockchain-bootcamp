@@ -9,6 +9,9 @@ import { loadProvider,
   loadExchange 
 } from '../store/interations';
 
+import Navbar from './Navbar';
+
+
 
 function App() {
   const dispatch = useDispatch();
@@ -55,8 +58,8 @@ useEffect(() => {
 
   return (
     <div>
-
-      {/* Navbar */}
+      <Navbar />
+      
 
       <main className='exchange grid'>
         <section className='exchange__section--left grid'>

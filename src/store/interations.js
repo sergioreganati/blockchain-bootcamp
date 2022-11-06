@@ -1,8 +1,8 @@
-import { ethers, providers } from "ethers";
+import { ethers } from "ethers";
 import TOKEN_ABI from '../abis/Token.json'
 import EXCHANGE_ABI from '../abis/Exchange.json'
-import { provider } from "./reducer";
-import { Provider } from "react-redux";
+//import { provider } from "./reducer";
+//import { Provider } from "react-redux";
 
 
 //load provider
