@@ -2,13 +2,15 @@ import { createStore, combineReducers, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
 
-import { provider, token } from './reducer';
+import { provider, tokens, exchange } from './reducer';
 
 const reducers = combineReducers({
     provider,
-    token
+    tokens,
+    exchange
+});
 
-})
+
 
 const initialState = {};
 
