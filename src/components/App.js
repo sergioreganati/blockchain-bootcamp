@@ -1,31 +1,33 @@
 import { useEffect } from 'react';
 import { ethers } from 'ethers';
-import TOKEN_ABI from '../abis/Token.json'
 import EXCHANGE_ABI from '../abis/Exchange.json'
-import '../App.css';
 import config from '../config.json';
-
+import { useDispatch } from 'react-redux';
+import { loadProvider, loadNetwork, loadAccount, loadToken } from '../store/interations';
 
 
 function App() {
+  const dispatch = useDispatch();
 
 
 
   const loadblockchainData = async () => {
-    const acounts = await window.ethereum.request({ method: 'eth_requestAccounts' })
-    console.log(acounts[0])
-    //connect ethers to blockchain
-    const provider = new ethers.providers.Web3Provider(window.ethereum)
 
-    //get newtwork id
-    const { chainId } = await provider.getNetwork()
-    console.log(chainId)
-    console.log(config)
+
+    const acount = await loadAccount(dispatch);
+    console.log(acount[0])
+
+    //connect ethers to blockchain using function defined in interactions and store info
+    const provider = await loadProvider(dispatch)
+    const chainId = await loadNetwork(dispatch, provider)
+
     //get Tokens contract
-    const Dapp = new ethers.Contract(config[chainId].DApp.address , TOKEN_ABI, provider)
-    console.log(`Dapp token fetched: ${Dapp.address}\n`)
+    const token = await loadToken(provider, config[chainId].DApp.address, dispatch)
+    console.log(`Dapp token fetched: ${token.address}\n`)
+
     //log Dapp symbol
-    const symbol = await Dapp.symbol()
+
+    const symbol = await token.symbol()
     console.log(symbol)
     //const mETH = new ethers.Contract(config[chainId].mETH.address, TOKEN_ABI, provider)
     //console.log(`mETH token fetched: ${mETH.address}\n`)
