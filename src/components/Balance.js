@@ -50,6 +50,24 @@ const Balance = () => {
 
         }
     }
+    const withdrawHandler = (e, token) => {
+        e.preventDefault();
+
+      
+        if (token.address === tokens[0].address) {
+            //console.log(`depositing ${token1TransferAmount} ${token.symbol}`)
+         transferTokens(provider, exchange, 'Withdraw', token, token1TransferAmount, dispatch) 
+         setToken1TransferAmount(0)
+        }   else {
+            transferTokens(provider, exchange, 'Withdraw', token, token2TransferAmount, dispatch) 
+        setToken2TransferAmount(0)
+        }
+    }
+
+
+
+
+
     const depositRef = useRef(null);
     const withdrawRef = useRef(null);
 
@@ -83,8 +101,8 @@ const Balance = () => {
         <div className='component__header flex-between'>
           <h2>Balance</h2>
           <div className='tabs'>
-            <button onClick={tabHandler} ref={depositRef} className='tab'>Deposit</button>
-            <button onClick={tabHandler} ref={withdrawRef} className='tab tab--active'>Withdraw</button>
+            <button onClick={tabHandler} ref={depositRef} className='tab tab--active'>Deposit</button>
+            <button onClick={tabHandler} ref={withdrawRef} className='tab'>Withdraw</button>
           </div>
         </div>
   
@@ -97,8 +115,15 @@ const Balance = () => {
             <p><small>Exchange</small><br />{exchangeBalances && exchangeBalances[0]}</p>
 
           </div>
-  
-          <form onSubmit={(e) =>depositHandler(e, tokens[0])}>
+      
+            <form onSubmit= {isDeposit ? (
+                (e) =>depositHandler(e, tokens[0])
+            ) : (
+                (e) =>withdrawHandler(e, tokens[0])
+            )}>
+            
+
+           
             <label htmlFor="token0">{symbols && symbols[0]} Amount</label>
             <input 
                 type="text" 
@@ -128,7 +153,11 @@ const Balance = () => {
             <p><small>Exchange</small><br />{exchangeBalances && exchangeBalances[1]}</p>
           </div>
   
-          <form onSubmit={(e) =>depositHandler(e, tokens[1])}>
+          <form onSubmit={isDeposit ? (
+                (e) =>depositHandler(e, tokens[1])
+            ) : (
+                (e) =>withdrawHandler(e, tokens[1])
+            )}>
             <label htmlFor="token1">{symbols && symbols[1]} Amount</label>
             <input 
                 type="text" 
