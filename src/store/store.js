@@ -8,6 +8,7 @@ const reducers = combineReducers({
     provider,
     tokens,
     exchange
+    
 });
 
 

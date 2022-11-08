@@ -4,14 +4,17 @@ import config from '../config.json';
 import { useDispatch } from 'react-redux';
 import { loadProvider, 
   loadNetwork, 
-  //loadAccount, 
   loadTokens, 
   loadExchange,
-  loadAccount 
+  loadAccount,
+  subscribeToEvents
 } from '../store/interations';
 
 import Navbar from './Navbar';
 import Markets from './Market';
+import Balance from './Balance';
+
+
 
 
 
@@ -57,8 +60,13 @@ function App() {
    
     //get exchange contract
     const exchangeConfig = config[chainId].exchange
-   await loadExchange(provider, exchangeConfig.address, dispatch)
+   const exchange = await loadExchange(provider, exchangeConfig.address, dispatch)
     //console.log(`Exchange fetched: ${exchange.address}\n`)
+
+    //listen to subscribe to events
+    subscribeToEvents(exchange, dispatch)
+
+
   }
 useEffect(() => {
   loadblockchainData()
@@ -73,7 +81,7 @@ useEffect(() => {
 
           <Markets />
 
-          {/* Balance */}
+          <Balance />
 
           {/* Order */}
 
