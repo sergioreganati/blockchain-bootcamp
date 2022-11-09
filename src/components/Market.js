@@ -4,13 +4,6 @@ import { loadTokens } from '../store/interations';
 
 //fetch chainId from state
 
-
-
-
-
-
-
-
 const Markets = () => {
     
     const dispatch = useDispatch();
@@ -22,9 +15,6 @@ const Markets = () => {
         
         }
        
-
-
-
     return(
         <div className='component exchange__markets'>
             <div className='component__header'>
@@ -34,29 +24,19 @@ const Markets = () => {
                 <select name="markets" id="markets" onChange={marketHandler}>
                 <option value={`${config[chainId].DApp.address},${config[chainId].mETH.address}`}>DApp/mETH</option>
                 <option value={`${config[chainId].DApp.address},${config[chainId].mDAI.address}`}>DApp/mDai</option>
-
-                </select> 
-                 
+                <option value={`${config[chainId].mETH.address},${config[chainId].mDAI.address}`}>mETH/mDai</option>
+                </select>  
 
                 ) : (
                 <div>
                 <p>Connect to a network</p>
                 </div>
 
-
-
                 )}
-
 
                 <hr />
             </div>
-
-
-
-
-
     )
 
 }
 export default Markets
-

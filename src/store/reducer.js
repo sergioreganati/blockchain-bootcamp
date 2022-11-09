@@ -81,7 +81,10 @@ export const tokens = (state = DEFAULT_TOKEN_STATE, action) => {
         loaded: false, 
         contract: {}, 
         transaction:{isSuccessful: false} ,
-        events:[]
+        events:[],
+        withdraw:[],
+        allOrders: {data: [], loaded: false},
+    
     }
 export const exchange = (state = DEFAULT_EXCHANGE_STATE, action) => {
     switch (action.type) {
@@ -136,6 +139,60 @@ export const exchange = (state = DEFAULT_EXCHANGE_STATE, action) => {
                     isError: true
                 },
                 transferInProgress: false,
+            }
+
+
+        //make order
+
+       case 'ORDER_REQUEST':
+            return {
+                ...state,
+                transaction: {
+                    transactionType: 'Order',
+                    isPending: true,
+                    isSuccessful: false
+                },
+                orderInProgress: true,
+            }
+
+        case 'ORDER_FAIL':
+            return {
+                ...state,
+                transaction: {
+                    transactionType: 'Order',
+                    isPending: false,
+                    isSuccessful: false,
+                    isError: true
+                },
+                orderInProgress: false,
+            }
+            
+        case 'ORDER_SUCCESS':
+                
+            let index, data
+        //prevent duplicate orders
+           // index = state.allOrders.data.findIndex(order => order.id === action.event.id) 
+        //console.log(index)
+           // if (index === (-1)) {
+                data = [action.event, ...state.allOrders.data]
+             //   console.log('updating database')
+          // } else {
+          //     data = state.allOrders.data
+          //     console.log('database unchanged')
+          // }  
+                return {    
+                ...state,
+                allOrders: {
+                    ...state.allOrders, 
+                    data
+                },
+                transaction: {
+                    transactionType: 'Order',
+                    isPending: false,
+                    isSuccessful: true
+                },
+                orderInProgress: false,
+                events: [action.event, ...state.events]
             }
 
         

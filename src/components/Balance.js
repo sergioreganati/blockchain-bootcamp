@@ -1,21 +1,21 @@
 import dapp from '../assets/dapp.svg';
 import eth from '../assets/eth.svg';
 import { useSelector ,useDispatch} from 'react-redux';
-import { loadBalances } from '../store/interations';
+import { loadBalances, transferTokens } from '../store/interations';
 import { useEffect, useState , useRef } from 'react';
-import { transferTokens } from '../store/interations';
 
 
 const Balance = () => {
-    const dispatch = useDispatch();
-
+    
+    
     const [isDeposit, setIsDeposit] = useState(true);
     const [token1TransferAmount, setToken1TransferAmount] = useState(0);
     const [token2TransferAmount, setToken2TransferAmount] = useState(0);
-
+    
+    const dispatch = useDispatch();
     const symbols = useSelector(state => state.tokens.symbols);
 
-    //console.log(symbols[1]);
+   
     const provider = useSelector(state => state.provider.connection);
     const exchange = useSelector(state => state.exchange.contract);
     const exchangeBalances = useSelector(state => state.exchange.balances);
@@ -23,7 +23,24 @@ const Balance = () => {
     const tokens = useSelector(state => state.tokens.contracts);
     const tokenBalances = useSelector(state => state.tokens.balances);
     const account = useSelector(state => state.provider.account);
-    
+
+    const depositRef = useRef(null);
+    const withdrawRef = useRef(null);
+
+    const tabHandler = (e) => {
+        if(e.target.className !== depositRef.current.className) {
+            depositRef.current.className = 'tab';
+            e.target.className = 'tab tab--active';
+            setIsDeposit(false);
+        } else {
+            e.target.className = 'tab tab--active';
+            withdrawRef.current.className = 'tab';
+            setIsDeposit(true);
+        }
+
+    }
+
+
     const amountHandler = (event, token) => {
         if (token.address === tokens[0].address) {
             setToken1TransferAmount(event.target.value)
@@ -51,7 +68,7 @@ const Balance = () => {
         }
     }
     const withdrawHandler = (e, token) => {
-        e.preventDefault();
+       e.preventDefault();
 
       
         if (token.address === tokens[0].address) {
@@ -59,36 +76,11 @@ const Balance = () => {
          transferTokens(provider, exchange, 'Withdraw', token, token1TransferAmount, dispatch) 
          setToken1TransferAmount(0)
         }   else {
-            transferTokens(provider, exchange, 'Withdraw', token, token2TransferAmount, dispatch) 
+        transferTokens(provider, exchange, 'Withdraw', token, token2TransferAmount, dispatch) 
         setToken2TransferAmount(0)
         }
+        console.log('Withdraw tokens....')
     }
-
-
-
-
-
-    const depositRef = useRef(null);
-    const withdrawRef = useRef(null);
-
-
-    const tabHandler = (e) => {
-        if(e.target.className !== depositRef.current.className) {
-            depositRef.current.className = 'tab';
-            withdrawRef.current.className = 'tab tab--active';
-            setIsDeposit(false);
-        } else {
-            depositRef.current.className = 'tab tab--active';
-            withdrawRef.current.className = 'tab';
-            setIsDeposit(true);
-        }
-
-
-
-    }
-    
-
-
 
 
     useEffect(() => {

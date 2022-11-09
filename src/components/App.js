@@ -13,6 +13,8 @@ import { loadProvider,
 import Navbar from './Navbar';
 import Markets from './Market';
 import Balance from './Balance';
+import Order from './Order';
+
 
 
 
@@ -83,7 +85,7 @@ useEffect(() => {
 
           <Balance />
 
-          {/* Order */}
+         <Order />
 
         </section>
         <section className='exchange__section--right grid'>
