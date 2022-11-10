@@ -7,13 +7,15 @@ import { loadProvider,
   loadTokens, 
   loadExchange,
   loadAccount,
-  subscribeToEvents
+  subscribeToEvents,
+  loadAllOrders
 } from '../store/interations';
 
 import Navbar from './Navbar';
 import Markets from './Market';
 import Balance from './Balance';
 import Order from './Order';
+import OrderBook from './OrderBook';
 
 
 
@@ -65,6 +67,9 @@ function App() {
    const exchange = await loadExchange(provider, exchangeConfig.address, dispatch)
     //console.log(`Exchange fetched: ${exchange.address}\n`)
 
+    //fetch all orders
+    loadAllOrders(provider, exchange, dispatch)
+
     //listen to subscribe to events
     subscribeToEvents(exchange, dispatch)
 
@@ -96,7 +101,7 @@ useEffect(() => {
 
           {/* Trades */}
 
-          {/* OrderBook */}
+          <OrderBook />
 
         </section>
       </main>
