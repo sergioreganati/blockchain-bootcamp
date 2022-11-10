@@ -36,7 +36,7 @@ const OrderBook = () => {
                 return (
               <tr key={index}>
               <td>{order.token0Amount}</td>
-              <td style={{color: `${order.orderTypeClass}`}}>{order.tokenPrice}</td>
+              <td style={{color: `${order.orderTypeClass}`}}>{order.displayTokenPrice}</td>
               <td>{order.token1Amount}</td>
             </tr>
                 )
@@ -62,7 +62,7 @@ const OrderBook = () => {
                 return (
                   <tr key={index}>
                   <td>{order.token0Amount}</td>
-                  <td style={{color: `${order.orderTypeClass}`}}>{order.tokenPrice}</td>
+                  <td style={{color: `${order.orderTypeClass}`}}>{order.displayTokenPrice}</td>
                   <td>{order.token1Amount}</td>
                 </tr>
                   )    

@@ -16,6 +16,7 @@ import Markets from './Market';
 import Balance from './Balance';
 import Order from './Order';
 import OrderBook from './OrderBook';
+import PriceChart from './PriceChart';
 
 
 
@@ -70,6 +71,9 @@ function App() {
     //fetch all orders
     loadAllOrders(provider, exchange, dispatch)
 
+    
+  
+
     //listen to subscribe to events
     subscribeToEvents(exchange, dispatch)
 
@@ -95,7 +99,7 @@ useEffect(() => {
         </section>
         <section className='exchange__section--right grid'>
 
-          {/* PriceChart */}
+          <PriceChart />
 
           {/* Transactions */}
 
