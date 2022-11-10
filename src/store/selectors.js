@@ -3,28 +3,31 @@ import { get, groupBy, reject } from 'lodash';
 import { ethers } from 'ethers';
 import moment from 'moment';
 
+const GREEN = '#25CE8F'
+const RED = '#F45353'
 
-const tokens = state => get(state, 'tokens.contracts', [])
+const tokens = state => get(state, 'tokens.contracts')
 
 const allOrders = state => get(state, 'exchange.allOrders.data', []);
 const cancelledOrders = state => get(state, 'exchange.cancelledOrders.data', []);
 const filledOrders = state => get(state, 'exchange.filledOrders.data', []);
 
-const GREEN = '#25CE8F'
-const RED = '#F45353'
 
 const openOrders = state => {
     const all = allOrders(state)
-    const cancelled = cancelledOrders(state)
     const filled = filledOrders(state)
+    const cancelled = cancelledOrders(state)
+  
     const openOrders = reject(all, (order) => {
-        const orderCancelled = cancelled.find((o) => o.id.toString() === order.id.toString())
-        const orderFilled = filled.find((o) => o.id.toString() === order.id.toString())
-        return (orderCancelled || orderFilled)
-
+        const orderId = [order.id]
+      const orderFilled = filled.find((o) => o.id.toString() === orderId.toString())
+      const orderCancelled = cancelled.find((o) => o.id.toString() === orderId.toString())
+      return(orderFilled || orderCancelled)
     })
+  
     return openOrders
-}
+  
+  }
 
 
 
@@ -35,16 +38,17 @@ const openOrders = state => {
 
 //treat database
 const decorateOrder = (order, tokens) => {
-let token0Amount, token1Amount
-
-//giving eth for dapp, dapp token0, eth token1
-if (order.tokenGet === tokens[1].address) {
-token0Amount =order.amountGive
-token1Amount =order.amountGet
-} else {
-token0Amount =order.amountGet
-token1Amount =order.amountGive
-}
+    let token0Amount, token1Amount
+  
+    // Note: DApp should be considered token0, mETH is considered token1
+    // Example: Giving mETH in exchange for DApp
+    if (order.tokenGive === tokens[1].address) {
+      token0Amount = order.amountGive // The amount of DApp we are giving
+      token1Amount = order.amountGet // The amount of mETH we want...
+    } else {
+      token0Amount = order.amountGet // The amount of DApp we want
+      token1Amount = order.amountGive // The amount of mETH we are giving...
+    }
 const precision = 100000
 let tokenPrice = (token1Amount / token0Amount)
 tokenPrice = Math.round(tokenPrice * precision) / precision
