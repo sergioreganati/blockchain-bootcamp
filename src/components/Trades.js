@@ -17,9 +17,6 @@ const filledOrdersLenght = filledOrders && filledOrders.length
   
         {!filledOrders || filledOrdersLenght === 0 ? (
             <Banner text={'No trades yet'}/>
-            
-            
-
         ) : (
         <table>
           <thead>
