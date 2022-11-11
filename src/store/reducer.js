@@ -198,22 +198,9 @@ export const exchange = (state = DEFAULT_EXCHANGE_STATE, action) => {
                 
             let index, data
         //prevent duplicate orders
-            // if (action.event.returnValues.id) {
-            //     index = state.allOrders.data.findIndex(order => order.id === action.event.returnValues.id)
-            //     data = [...state.allOrders.data]
-            //     data[index] = action.event.returnValues
-            // } else {
-            //     data = [action.event.returnValues, ...state.allOrders.data]
-            // }
-               // const orderId = state.allOrders.data.order.id
-        //     if(order != null) {
-        //         
                 index = state.allOrders.data.findIndex(order => order.id.toString() === action.order.id.toString()) 
-        //     } else {
-        //         index = 0
-        //     }
-        // console.log(index)
-             if (index === (-1)) {
+             
+                if (index === (-1)) {
                 data = [...state.allOrders.data, action.order]
                  console.log('updating database')
             } else {
