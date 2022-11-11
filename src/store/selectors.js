@@ -5,6 +5,7 @@ import moment from 'moment';
 
 const GREEN = '#25CE8F'
 const RED = '#F45353'
+const YELLOW = '#EADDCA'
 
 const tokens = state => get(state, 'tokens.contracts')
 
@@ -178,4 +179,60 @@ export const priceChartSelector = createSelector(
         return graphData
 
     }
-    
+
+//.......................All FILLED ORDERS SELECTOR.......................
+export const filledOrdersSelector = createSelector(
+    filledOrders,
+    tokens,
+    (orders, tokens) => {
+        if(!tokens[0] || !tokens[1]) {return}
+        orders = orders.filter((o) => o.tokenGet === tokens[0].address || o.tokenGet === tokens[1].address)
+        orders = orders.filter((o) => o.tokenGive === tokens[0].address || o.tokenGive === tokens[1].address)
+        orders = orders.sort((a, b) => b.timeStamp - a.timeStamp)
+
+        orders = decorateFilledorders(orders, tokens)
+
+        //sort orders by descending timestamp
+        orders = orders.sort((a, b) => b.timeStamp - a.timeStamp)
+
+        return orders
+    }
+)
+
+const decorateFilledorders = (orders, tokens) => {
+    //defining 1st value of previous order
+    //sort orders by timestamp
+    orders = orders.sort((a, b) => a.timeStamp - b.timeStamp)
+    let previousOrder = orders[0]
+    return(
+        orders.map((order) => {
+            order = decorateOrder(order, tokens)
+            order = decorateFilledOrder(order, previousOrder)
+            previousOrder = order //update previous order after decoration
+        return order
+        
+    })
+    )
+}
+
+const decorateFilledOrder = (order, previousOrder) => {
+    //const increase = order.tokenPrice > previousOrder.tokenPrice
+
+    return ({
+        ...order,
+        tokenPriceClass: tokenPriceClass(order.tokenPrice, order.id, previousOrder),
+    })
+
+}
+
+const tokenPriceClass  = (tokenPrice, orderId, previousOrder) => {
+    if (previousOrder.id.toString() === orderId.toString()) {
+        return YELLOW
+    }
+
+    if(previousOrder.tokenPrice <= tokenPrice) {
+    return GREEN 
+    } else {
+    return RED
+    }
+}

@@ -2,13 +2,19 @@ import { useSelector } from "react-redux";
 
 import { orderBookSelector } from "../store/selectors";
 import sort from '../assets/sort.svg';
+//import { useEffect } from "react";
 
 
 
 const OrderBook = () => {
     const symbols = useSelector(state => state.tokens.symbols);
+    //const lastOrder = useSelector(state => state.exchange.allOrders.data.lenght);
+    const orderBook = useSelector(orderBookSelector)
+    
+    //useEffect(() => {
+    //  if(lastOrder) {orderBook = useSelector(orderBookSelector) }
+    //  }, orderBook)
 
-    const orderBook = useSelector(orderBookSelector);
 
     //console.log({ orderBook })
     return (
