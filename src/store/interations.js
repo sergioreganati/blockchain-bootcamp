@@ -74,6 +74,7 @@ export const subscribeToEvents = (exchange, dispatch) => {
     })
 
     exchange.on('Order', (id, user, tokenGet, amountGet, tokenGive, amountGive, timestamp, event) => {
+        //makes order avaiable for the reducert to compare with the orderbook... see reducer ORDER SUCCESS
         const order=event.args
         dispatch({ type: 'ORDER_SUCCESS', order, event })  
         console.log('Order event fired')
