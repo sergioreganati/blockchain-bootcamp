@@ -15,7 +15,7 @@ const OrderBook = () => {
     const provider = useSelector(state => state.provider.connection);
 
   const fillOrderHandler = (order) => {
-    console.log(order);
+    //console.log(order);
     fillOrder(provider, exchange, order, dispatch)
   }
 

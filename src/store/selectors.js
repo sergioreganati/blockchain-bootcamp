@@ -7,11 +7,12 @@ const GREEN = '#25CE8F'
 const RED = '#F45353'
 const YELLOW = '#EADDCA'
 
+const account = state => get(state, 'provider.account')
+const events = state => get(state, 'exchange.events', [])
 const tokens = state => get(state, 'tokens.contracts')
 const allOrders = state => get(state, 'exchange.allOrders.data', []);
 const cancelledOrders = state => get(state, 'exchange.cancelledOrders.data', []);
 const filledOrders = state => get(state, 'exchange.filledOrders.data', []);
-const account = state => get(state, 'provider.account')
 
 
 
@@ -342,3 +343,15 @@ export const filledOrdersSelector = createSelector(
             orderSign: orderType === 'buy' ? '+' : '-'
         })
         }
+
+    //--------------------FETCH ORDER INFO FOR THE BLOCKEXPLORER-----------------
+    export const myEventsSelector = createSelector(
+        account,
+        events,
+        (account, events) => {
+            events = events.filter((e) => e.args.user === account)
+           
+            //console.log(events)
+                return (events)
+            
+        })

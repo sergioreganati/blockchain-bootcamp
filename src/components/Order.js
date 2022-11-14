@@ -14,7 +14,7 @@ const Order = () => {
     const dispatch = useDispatch();
 
 
-    const buyHandler = (e,) => {
+    const buyHandler = (e) => {
         e.preventDefault();
         buyOrder(provider, exchange, tokens, { amount, price }, dispatch)
         setAmount(0)

@@ -2,7 +2,8 @@ import { useEffect } from 'react';
 //import { ethers } from 'ethers';
 import config from '../config.json';
 import { useDispatch } from 'react-redux';
-import { loadProvider, 
+import { 
+  loadProvider, 
   loadNetwork, 
   loadTokens, 
   loadExchange,
@@ -19,6 +20,7 @@ import Order from './Order';
 import PriceChart from './PriceChart';
 import Trades from './Trades';
 import Transactions from './Transactions';
+import Alert from './Alert';
 
 
 
@@ -112,7 +114,7 @@ useEffect(() => {
         </section>
       </main>
 
-      {/* Alert */}
+      <Alert />
 
     </div>
   );

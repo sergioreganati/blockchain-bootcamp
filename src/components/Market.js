@@ -10,7 +10,7 @@ const Markets = () => {
     const chainId = useSelector(state => state.provider.chainId);
     const provider = useSelector(state => state.provider.connection);
     const marketHandler = async (event) => {
-        console.log(`Market Changed`)
+        //console.log(`Market Changed`)
         loadTokens(provider, (event.target.value).split(`,`), dispatch)
         
         }

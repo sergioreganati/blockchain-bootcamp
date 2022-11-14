@@ -77,21 +77,21 @@ export const subscribeToEvents = (exchange, dispatch) => {
         //makes order avaiable for the reducert to compare with the orderbook... see reducer ORDER SUCCESS
         const order=event.args
         dispatch({ type: 'ORDER_SUCCESS', order, event })  
-        console.log('Order event fired')
+        //console.log('Order event fired')
         
     })
 
     exchange.on('Cancel', (id, user, tokenGet, amountGet, tokenGive, amountGive, timestamp, event) => {
         const order=event.args
         dispatch({ type: 'CANCEL_SUCCESS', order, event })  
-        console.log('Cancel event fired')
+        //console.log('Cancel event fired')
         
     })
 
     exchange.on('Trade', (id, user, tokenGet, amountGet, tokenGive, amountGive, creator, timestamp, event) => {
         const order=event.args
         dispatch({ type: 'ORDER_FILL_SUCCESS', order, event })  
-        console.log('Trade event fired')
+        //console.log('Trade event fired')
         
     })
 }

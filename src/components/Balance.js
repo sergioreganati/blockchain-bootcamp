@@ -79,7 +79,7 @@ const Balance = () => {
         transferTokens(provider, exchange, 'Withdraw', token, token2TransferAmount, dispatch) 
         setToken2TransferAmount(0)
         }
-        console.log('Withdraw tokens....')
+        //console.log('Withdraw tokens....')
     }
 
 

@@ -10,7 +10,7 @@ const Transactions = () => {
   const myOpenOrders = useSelector(myOpenOrdersSelector);
   //console.log(myOpenOrders);
   const myFilledOrders = useSelector(myFilledOrderSelector);
-  console.log(myFilledOrders);
+  //console.log(myFilledOrders);
 
   const symbols = useSelector(state => state.tokens.symbols);
  

@@ -209,10 +209,10 @@ export const exchange = (state = DEFAULT_EXCHANGE_STATE, action) => {
              
                 if (index === (-1)) {
                 data = [...state.allOrders.data, action.order]
-                 console.log('updating database')
+                 //console.log('updating database')
             } else {
                 data = state.allOrders.data
-                console.log('database unchanged')
+                //console.log('database unchanged')
             }  
                 return {    
                 ...state,
