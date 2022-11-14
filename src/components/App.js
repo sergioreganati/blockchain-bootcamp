@@ -14,8 +14,8 @@ import { loadProvider,
 import Navbar from './Navbar';
 import Markets from './Market';
 import Balance from './Balance';
-import Order from './Order';
 import OrderBook from './OrderBook';
+import Order from './Order';
 import PriceChart from './PriceChart';
 import Trades from './Trades';
 import Transactions from './Transactions';

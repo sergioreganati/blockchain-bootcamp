@@ -84,6 +84,8 @@ export const tokens = (state = DEFAULT_TOKEN_STATE, action) => {
         events:[],
         withdraw:[],
         allOrders: {data: [], loaded: false},
+        cancelledOrders: {data: [], loaded: false},
+        filledOrders: {data: [], loaded: false},
     
     }
 export const exchange = (state = DEFAULT_EXCHANGE_STATE, action) => {
@@ -95,6 +97,19 @@ export const exchange = (state = DEFAULT_EXCHANGE_STATE, action) => {
                 loaded: true,
                 contract: action.exchange,
             }
+         //-----------------LOAD_EXCHANGE_BALANCES-----------------
+        case 'EXCHANGE_TOKEN_1_BALANCE_LOADED':
+            return {
+                ...state,
+                balances: [action.balance],
+            }
+        case 'EXCHANGE_TOKEN_2_BALANCE_LOADED':
+            return {
+                    ...state,
+                    balances: [...state.balances, action.balance],
+                }
+
+        //-----------------LOAD_EXCHANGE_ORDERS-----------------
         case 'ALL_ORDERS_LOADED':
             return {
                 ...state,
@@ -161,19 +176,103 @@ export const exchange = (state = DEFAULT_EXCHANGE_STATE, action) => {
     
                 }
             }
-    
+        //make order
 
-        case 'EXCHANGE_TOKEN_1_BALANCE_LOADED':
+        case 'ORDER_REQUEST':
             return {
                 ...state,
-                balances: [action.balance],
+                transaction: {
+                    transactionType: 'Order',
+                    isPending: true,
+                    isSuccessful: false
+                },
+                orderInProgress: true,
             }
-        case 'EXCHANGE_TOKEN_2_BALANCE_LOADED':
+
+        case 'ORDER_FAIL':
             return {
+                ...state,
+                transaction: {
+                    transactionType: 'Order',
+                    isPending: false,
+                    isSuccessful: false,
+                    isError: true
+                },
+                orderInProgress: false,
+            }
+            
+            case 'ORDER_SUCCESS':
+                
+                //prevent duplicate orders
+                var index, data
+                index = state.allOrders.data.findIndex(order => order.id.toString() === action.order.id.toString()) 
+             
+                if (index === (-1)) {
+                data = [...state.allOrders.data, action.order]
+                 console.log('updating database')
+            } else {
+                data = state.allOrders.data
+                console.log('database unchanged')
+            }  
+                return {    
+                ...state,
+                allOrders: {
+                    ...state.allOrders, 
+                    data
+                },
+                transaction: {
+                    transactionType: 'Order',
+                    isPending: false,
+                    isSuccessful: true
+                },
+                orderInProgress: false,
+                events: [action.event, ...state.events]
+            }
+
+            //-----------------FILLED ORDERS-----------------
+
+        case 'ORDER_FILL_SUCCESS' :
+           
+            index = state.filledOrders.data.findIndex(order => order.id.toString() === action.order.id.toString())
+            if(index === -1) {
+                data = [...state.filledOrders.data, action.order]
+            } else {
+                data = state.filledOrders.data
+            }
+            return {
+                ...state,
+                transaction: {
+                    isSuccessful: true,
+                    isPending: false
+                },
+                filledOrders: {
+                    ...state.filledOrders,
+                    data: [...state.filledOrders.data, action.order]
+                },
+                events: [action.event, ...state.events]
+            }
+            case 'ORDER_FILL_REQUEST' :
+                return {
                     ...state,
-                    balances: [...state.balances, action.balance],
+                    transaction: {
+                        isSuccessful: false,
+                        isPending: true,
+                        transactionType: 'Fill Order'
+                    }
                 }
-        ///TRSNFER TOKENS
+            case 'ORDER_FILL_FAIL' :
+                return {
+                    ...state,
+                    transaction: {
+                        isSuccessful: false,
+                        isPending: false,
+                        transactionType: 'Fill Order',
+                        isError: true
+                    }
+                }
+
+    
+        ///-----------------TRANSFER_TOKENS-----------------------
         case 'TRANSFER_REQUEST':
             return {
                 ...state,
@@ -210,58 +309,6 @@ export const exchange = (state = DEFAULT_EXCHANGE_STATE, action) => {
             }
 
 
-        //make order
-
-       case 'ORDER_REQUEST':
-            return {
-                ...state,
-                transaction: {
-                    transactionType: 'Order',
-                    isPending: true,
-                    isSuccessful: false
-                },
-                orderInProgress: true,
-            }
-
-        case 'ORDER_FAIL':
-            return {
-                ...state,
-                transaction: {
-                    transactionType: 'Order',
-                    isPending: false,
-                    isSuccessful: false,
-                    isError: true
-                },
-                orderInProgress: false,
-            }
-            
-        case 'ORDER_SUCCESS':
-                
-            let index, data
-        //prevent duplicate orders
-                index = state.allOrders.data.findIndex(order => order.id.toString() === action.order.id.toString()) 
-             
-                if (index === (-1)) {
-                data = [...state.allOrders.data, action.order]
-                 console.log('updating database')
-            } else {
-                data = state.allOrders.data
-                console.log('database unchanged')
-            }  
-                return {    
-                ...state,
-                allOrders: {
-                    ...state.allOrders, 
-                    data
-                },
-                transaction: {
-                    transactionType: 'Order',
-                    isPending: false,
-                    isSuccessful: true
-                },
-                orderInProgress: false,
-                events: [action.event, ...state.events]
-            }
 
         
         default:
