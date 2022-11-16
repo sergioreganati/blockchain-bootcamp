@@ -69,28 +69,23 @@ function App() {
    
     //get exchange contract
     const exchangeConfig = config[chainId].exchange
-   const exchange = await loadExchange(provider, exchangeConfig.address, dispatch)
-    //console.log(`Exchange fetched: ${exchange.address}\n`)
+    const exchange = await loadExchange(provider, exchangeConfig.address, dispatch)
 
     //fetch all orders
     loadAllOrders(provider, exchange, dispatch)
 
-    
-  
-
     //listen to subscribe to events
     subscribeToEvents(exchange, dispatch)
 
-
   }
+
 useEffect(() => {
   loadblockchainData()
 })
+
   return (
     <div>
       <Navbar />
-      
-
       <main className='exchange grid'>
         <section className='exchange__section--left grid'>
 
@@ -98,7 +93,7 @@ useEffect(() => {
 
           <Balance />
 
-         <Order />
+          <Order />
 
         </section>
         <section className='exchange__section--right grid'>

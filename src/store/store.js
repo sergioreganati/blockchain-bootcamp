@@ -11,8 +11,6 @@ const reducers = combineReducers({
     
 });
 
-
-
 const initialState = {};
 
 const middleware = [thunk];

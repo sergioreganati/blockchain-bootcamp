@@ -3,9 +3,6 @@ import { useRef, useEffect } from "react";
 import { myEventsSelector } from "../store/selectors";
 import config from '../config.json';
 
-
-
-
 const Alert = () => {
     const account = useSelector(state => state.provider.account)
     const isPending = useSelector(state => state.exchange.transaction.isPending);
@@ -55,8 +52,6 @@ const Alert = () => {
            
           ): (
             <div className="alert alert--remove" ref={alertRef} onClick={removeHandler}></div>
-            
-      
         
     )}
     </div>
@@ -65,3 +60,4 @@ const Alert = () => {
   }
   
   export default Alert;
+  

@@ -7,15 +7,13 @@ import { useEffect, useState , useRef } from 'react';
 
 const Balance = () => {
     
-    
     const [isDeposit, setIsDeposit] = useState(true);
     const [token1TransferAmount, setToken1TransferAmount] = useState(0);
     const [token2TransferAmount, setToken2TransferAmount] = useState(0);
     
     const dispatch = useDispatch();
+    
     const symbols = useSelector(state => state.tokens.symbols);
-
-   
     const provider = useSelector(state => state.provider.connection);
     const exchange = useSelector(state => state.exchange.contract);
     const exchangeBalances = useSelector(state => state.exchange.balances);
@@ -37,9 +35,7 @@ const Balance = () => {
             withdrawRef.current.className = 'tab';
             setIsDeposit(true);
         }
-
     }
-
 
     const amountHandler = (event, token) => {
         if (token.address === tokens[0].address) {
@@ -48,38 +44,30 @@ const Balance = () => {
             setToken2TransferAmount(event.target.value)
         }   
 
-
     }
-    //console.log({ token1TransferAmount })
 
     const depositHandler = (e, token) => {
         e.preventDefault();
-
       
         if (token.address === tokens[0].address) {
-            //console.log(`depositing ${token1TransferAmount} ${token.symbol}`)
          transferTokens(provider, exchange, 'Deposit', token, token1TransferAmount, dispatch) 
          setToken1TransferAmount(0)
         }   else {
             transferTokens(provider, exchange, 'Deposit', token, token2TransferAmount, dispatch) 
             setToken2TransferAmount(0)
-              // console.log(`depositing ${token2TransferAmount} ${token.symbol}`)
-
         }
     }
+
     const withdrawHandler = (e, token) => {
        e.preventDefault();
-
       
         if (token.address === tokens[0].address) {
-            //console.log(`depositing ${token1TransferAmount} ${token.symbol}`)
          transferTokens(provider, exchange, 'Withdraw', token, token1TransferAmount, dispatch) 
          setToken1TransferAmount(0)
         }   else {
         transferTokens(provider, exchange, 'Withdraw', token, token2TransferAmount, dispatch) 
         setToken2TransferAmount(0)
         }
-        //console.log('Withdraw tokens....')
     }
 
 
@@ -113,8 +101,6 @@ const Balance = () => {
             ) : (
                 (e) =>withdrawHandler(e, tokens[0])
             )}>
-            
-
            
             <label htmlFor="token0">{symbols && symbols[0]} Amount</label>
             <input 
@@ -157,7 +143,6 @@ const Balance = () => {
                 placeholder='0.0000' 
                 value={token2TransferAmount === 0 ? '' : token2TransferAmount}
                 onChange={(event) => amountHandler(event, tokens[1])}/>
-  
   
             <button className='button' type='submit'>
             {isDeposit ? (

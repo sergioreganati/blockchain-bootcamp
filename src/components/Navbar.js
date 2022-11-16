@@ -17,11 +17,9 @@ const Navbar = () => {
     }
     
     const networkHandler = async (event) => {
-      //console.log(event.target.value);
       await window.ethereum.request({
         method: 'wallet_switchEthereumChain',
         params: [{ chainId: event.target.value }],
-
     })
 
     } 
@@ -30,13 +28,10 @@ const Navbar = () => {
         <div className='exchange__header--brand flex'>
             <img src={logo} className ="logo" alt="DApp logo"></img>
             <h1>DApp Token Exchange</h1>
-            
-
         </div>
-  
         <div className='exchange__header--networks flex'>
-          <img src={eth} className="eth" alt="eth logo"></img>
 
+          <img src={eth} className="eth" alt="eth logo"></img>
           {chainId && (
           <select name="networks" id="networks" value={config[chainId] ?  `0x${chainId.toString(16)}`: `0`} onChange={networkHandler}> 
           <option value="0" disabled>Select Network</option>
@@ -53,7 +48,6 @@ const Navbar = () => {
             ) : (
             <p><small>My Balance</small>0.0000</p>
             )}
-            
 
             {account ? (
                 <a href={config[chainId] ? `${config[chainId].explorerURL}/address/${account}` : '#'} 
@@ -74,9 +68,6 @@ const Navbar = () => {
                 ) : (
                 <button className='button'onClick={connectHandler}>Connect</button>
                 )}
-           
-
-               
                 
         </div>
       </div>

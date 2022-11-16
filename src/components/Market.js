@@ -2,17 +2,14 @@ import config from '../config'
 import { useSelector , useDispatch} from 'react-redux';
 import { loadTokens } from '../store/interations';
 
-//fetch chainId from state
-
 const Markets = () => {
     
     const dispatch = useDispatch();
     const chainId = useSelector(state => state.provider.chainId);
     const provider = useSelector(state => state.provider.connection);
+
     const marketHandler = async (event) => {
-        //console.log(`Market Changed`)
         loadTokens(provider, (event.target.value).split(`,`), dispatch)
-        
         }
        
     return(

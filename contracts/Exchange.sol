@@ -15,8 +15,18 @@ contract Exchange {
 
 	uint256 public ordersCount;
 
-	event Deposit(address token, address user, uint256 amount,uint256 balance);
-	event Withdraw(address token, address user, uint256 amount,uint256 balance);
+	event Deposit(
+		address token, 
+		address user, 
+		uint256 amount,
+		uint256 balance
+	);
+	event Withdraw(
+		address token, 
+		address user, 
+		uint256 amount,
+		uint256 balance
+	);
 	event Order (		
 		uint256 id,
 		address user,
@@ -88,18 +98,20 @@ function withdrawToken(address _token, uint256 _amount) public {
 //check balances
 
 function balanceOf(address _token, address _user)
-public
-view
-returns (uint256)
+	public
+	view
+	returns (uint256)
 {
 	return tokens[_token][_user];
 }
 
 //make orders
-function makeOrder(address _tokenGet, 
+function makeOrder(
+address _tokenGet, 
 uint256 _amountGet, 
 address _tokenGive, 
-uint256 _amountGive) public {
+uint256 _amountGive
+) public {
 	require(balanceOf(_tokenGive, msg.sender)>=_amountGive);
 	ordersCount ++;
 	orders[ordersCount] = _Order(
@@ -118,7 +130,8 @@ uint256 _amountGive) public {
 		_amountGet, 
 		_tokenGive, 
 		_amountGive, 
-		block.timestamp);
+		block.timestamp)
+		;
 //Token give - token to be spent which token and how much
 //Token get - token to be receive which token and how much
 }
@@ -144,7 +157,7 @@ function cancelOrder(uint256 _id) public {
 function fillOrder(uint256 _id) public {
 	//order must be valid
 	//require(_id);
-	require(_id <= ordersCount && _id > 0);
+	require(_id > 0 && _id <= ordersCount);
 	//order cant be filled
 	require(!orderFilled[_id]);
 	//order cant be cancelled
@@ -200,9 +213,4 @@ function _trade(
 
 
 }
-//cancel orders
-//fill orders
-//charge fees
-//track fee account
-
 }

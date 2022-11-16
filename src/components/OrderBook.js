@@ -8,20 +8,18 @@ import { fillOrder } from "../store/interations";
 
 
 const OrderBook = () => {
-    const symbols = useSelector(state => state.tokens.symbols);
-    const orderBook = useSelector(orderBookSelector)
-    const dispatch = useDispatch();
-    const exchange = useSelector(state => state.exchange.contract);
-    const provider = useSelector(state => state.provider.connection);
+  const symbols = useSelector(state => state.tokens.symbols);
+  const orderBook = useSelector(orderBookSelector)
+  const dispatch = useDispatch();
+  const exchange = useSelector(state => state.exchange.contract);
+  const provider = useSelector(state => state.provider.connection);
 
   const fillOrderHandler = (order) => {
     //console.log(order);
     fillOrder(provider, exchange, order, dispatch)
   }
 
-
-
-    return (
+  return (
       <div className="component exchange__orderbook">
         <div className='component__header flex-between'>
           <h2>Order Book</h2>
@@ -37,7 +35,7 @@ const OrderBook = () => {
             <thead>
               <tr>
                 <th>{symbols && symbols[0]}<img src={sort} alt="Sort" /></th>
-                <th>{symbols && symbols[0]}/{symbols && symbols[1]}<img src={sort} alt="Sort" /></th>  
+                <th>{symbols && symbols[1]}/{symbols && symbols[0]}<img src={sort} alt="Sort" /></th>  
                 <th>{symbols && symbols[1]}<img src={sort} alt="Sort" /></th>
               </tr>
             </thead>
@@ -45,9 +43,9 @@ const OrderBook = () => {
               {orderBook && orderBook.sellOrders.map((order, index) => {
                 return (
              <tr key={index} onClick={() => fillOrderHandler(order)}>
-               <td>{order.token0Amount}</td>
-               <td style={{color: `${order.orderTypeClass}`}}>{order.displayTokenPrice}</td>
                <td>{order.token1Amount}</td>
+               <td style={{color: `${order.orderTypeClass}`}}>{order.displayTokenPrice}</td>
+               <td>{order.token0Amount}</td>
              </tr>
                 )
             })}
@@ -62,18 +60,18 @@ const OrderBook = () => {
             <caption>Buying</caption>
             <thead>
               <tr>
-                <th>{symbols && symbols[1]}<img src={sort} alt="Sort" /></th>
-                <th>{symbols && symbols[1]}/{symbols && symbols[0]}<img src={sort} alt="Sort" /></th>
                 <th>{symbols && symbols[0]}<img src={sort} alt="Sort" /></th>
+                <th>{symbols && symbols[1]}/{symbols && symbols[0]}<img src={sort} alt="Sort" /></th>
+                <th>{symbols && symbols[1]}<img src={sort} alt="Sort" /></th>
               </tr>
             </thead>
             <tbody>
               {orderBook && orderBook.buyOrders.map((order, index) => {
                 return (
                   <tr key={index} onClick={() => fillOrderHandler(order)}>
-                  <td>{order.token0Amount}</td>
-                  <td style={{color: `${order.orderTypeClass}`}}>{order.displayTokenPrice}</td>
                   <td>{order.token1Amount}</td>
+                  <td style={{color: `${order.orderTypeClass}`}}>{order.displayTokenPrice}</td>
+                  <td>{order.token0Amount}</td>
                 </tr>
                   )    
               })}
