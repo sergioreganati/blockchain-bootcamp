@@ -26,8 +26,8 @@ async function main() {
     const { chainId } = await ethers.provider.getNetwork()
     console.log("Using chainId", chainId)
 
-    const Dapp = await ethers.getContractAt('Token', config[chainId].DApp.address)
-    console.log(`Dapp token fetched: ${Dapp.address}\n`)
+    const Sdex = await ethers.getContractAt('Token', config[chainId].sDEX.address)
+    console.log(`Sdex token fetched: ${Sdex.address}\n`)
 
     const mETH = await ethers.getContractAt('Token', config[chainId].mETH.address)   
     console.log(`mETH token fetched: ${mETH.address}\n`) 
@@ -54,11 +54,11 @@ async function main() {
     const user2 = accounts[1]
     amount = tokens(10000)
         //user1 approves 10k Dapp on exchange
-        transaction = await Dapp.connect(user1).approve(exchange.address, amount)
+        transaction = await Sdex.connect(user1).approve(exchange.address, amount)
         await transaction.wait()
         console.log(`Approved ${amount} tokens from ${user1.address}`)
         //user1 deposits amount
-        transaction = await exchange.connect(user1).depositToken(Dapp.address, amount)
+        transaction = await exchange.connect(user1).depositToken(Sdex.address, amount)
         await transaction.wait()
         console.log(`Deposited ${amount} tokens from ${user1.address}\n`)
         //user2 approves 10k mETH
@@ -73,7 +73,7 @@ async function main() {
     //make & cancells orders   
     let orderId
         //user1 makes order
-        transaction = await exchange.connect(user1).makeOrder(mETH.address, tokens(100), Dapp.address, tokens(5))
+        transaction = await exchange.connect(user1).makeOrder(mETH.address, tokens(100), Sdex.address, tokens(5))
         result = await transaction.wait()
         console.log(`Make order from ${user1.address}\n`)
         //user1 cancells order
@@ -86,7 +86,7 @@ async function main() {
     //make & fill orders   
 
         //user1 makes order #1 
-        transaction = await exchange.connect(user1).makeOrder(mETH.address, tokens(100), Dapp.address, tokens(10))
+        transaction = await exchange.connect(user1).makeOrder(mETH.address, tokens(100), Sdex.address, tokens(10))
         result = await transaction.wait()
         console.log(`Make order from ${user1.address}`)
         //user2 fills order #1
@@ -97,7 +97,7 @@ async function main() {
         await wait(1)
 
         //user1 makes order #2 
-        transaction = await exchange.connect(user1).makeOrder(mETH.address, tokens(50), Dapp.address, tokens(15))
+        transaction = await exchange.connect(user1).makeOrder(mETH.address, tokens(50), Sdex.address, tokens(15))
         result = await transaction.wait()
         console.log(`Make order from ${user1.address}`)
         //user2 fills order #2
@@ -108,7 +108,7 @@ async function main() {
         await wait(1)
 
         //user1 makes order #3 
-        transaction = await exchange.connect(user1).makeOrder(mETH.address, tokens(200), Dapp.address, tokens(20))
+        transaction = await exchange.connect(user1).makeOrder(mETH.address, tokens(200), Sdex.address, tokens(20))
         result = await transaction.wait()
         console.log(`Make order from ${user1.address}`)
         //user2 fills order #3
@@ -123,7 +123,7 @@ async function main() {
 
         //user1
         for (let i = 1; i<= 10; i++){
-            transaction = await exchange.connect(user1).makeOrder(mETH.address, tokens(10 * i), Dapp.address, tokens(10))
+            transaction = await exchange.connect(user1).makeOrder(mETH.address, tokens(10 * i), Sdex.address, tokens(10))
             result = await transaction.wait()
             console.log(`Make order from ${user1.address}`)
             await wait(1)
@@ -131,7 +131,7 @@ async function main() {
         //user2
 
         for (let i = 1; i<= 10; i++){
-            transaction = await exchange.connect(user2).makeOrder(Dapp.address, tokens(10), mETH.address, tokens(10 * i))
+            transaction = await exchange.connect(user2).makeOrder(Sdex.address, tokens(10), mETH.address, tokens(10 * i))
             result = await transaction.wait()
             console.log(`Make order from ${user2.address}`)
             await wait(1)

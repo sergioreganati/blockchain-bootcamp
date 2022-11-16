@@ -9,9 +9,9 @@ async function main() {
   console.log(`Accounts fetched:\n${accounts[0].address}\n${accounts[1].address}\n`)
   
   //Deploy contracts
-  const dapp = await Token.deploy('Dapp University', 'DAPP',1000000)
-  await dapp.deployed()
-  console.log(`DApp deployed to: ${dapp.address}`)
+  const sdex = await Token.deploy('SDEX', 'SDEX',1000000)
+  await sdex.deployed()
+  console.log(`SDEX deployed to: ${sdex.address}`)
 
   const mETH = await Token.deploy('mETH', 'mETH',1000000)
   await mETH.deployed()

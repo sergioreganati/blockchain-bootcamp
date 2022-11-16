@@ -1,5 +1,5 @@
-import logo from '../assets/logo.png';
 import eth from '../assets/eth.svg';
+import cdex from '../assets/cdex.png';
 import { useSelector, useDispatch } from 'react-redux';
 import Blockies from 'react-blockies';
 import { loadAccount} from '../store/interations';
@@ -26,8 +26,8 @@ const Navbar = () => {
     return(
       <div className='exchange__header grid'>
         <div className='exchange__header--brand flex'>
-            <img src={logo} className ="logo" alt="DApp logo"></img>
-            <h1>DApp Token Exchange</h1>
+            <img src={cdex} className ="logo" alt="Cdex logo"></img>
+            <h1>SDEX Token Exchange</h1>
         </div>
         <div className='exchange__header--networks flex'>
 

@@ -1,5 +1,5 @@
-import dapp from '../assets/dapp.svg';
 import eth from '../assets/eth.svg';
+import cdex from '../assets/cdex_small.png';
 import { useSelector ,useDispatch} from 'react-redux';
 import { loadBalances, transferTokens } from '../store/interations';
 import { useEffect, useState , useRef } from 'react';
@@ -17,7 +17,7 @@ const Balance = () => {
     const provider = useSelector(state => state.provider.connection);
     const exchange = useSelector(state => state.exchange.contract);
     const exchangeBalances = useSelector(state => state.exchange.balances);
-    const transferInProgress = useSelector(state => state.exchange.transferInProgress);
+    const transferInProgress = useSelector(state => state.exchange.transaction.isSuccessful);
     const tokens = useSelector(state => state.tokens.contracts);
     const tokenBalances = useSelector(state => state.tokens.balances);
     const account = useSelector(state => state.provider.account);
@@ -90,7 +90,7 @@ const Balance = () => {
   
         <div className='exchange__transfers--form'>
           <div className='flex-between'>
-            <p><small>Token</small><br /><img src = {dapp} alt="Token Logo" />{symbols && symbols[0]}</p>
+            <p><small>Token</small><br /><img src = {symbols[0] === 'SDEX' ? cdex : eth} alt="Token Logo" />{symbols && symbols[0]}</p>
             <p><small>Wallet</small><br />{tokenBalances && tokenBalances[0]}</p>
             <p><small>Exchange</small><br />{exchangeBalances && exchangeBalances[0]}</p>
 
@@ -126,7 +126,7 @@ const Balance = () => {
   
         <div className='exchange__transfers--form'>
           <div className='flex-between'>
-          <p><small>Token</small><br /><img src = {eth} alt="Token Logo" />{symbols && symbols[1]}</p>
+          <p><small>Token</small><br /><img src = {symbols[1] === 'SDEX' ? cdex : eth} alt="Token Logo" />{symbols && symbols[1]}</p>
             <p><small>Wallet</small><br />{tokenBalances && tokenBalances[1]}</p>
             <p><small>Exchange</small><br />{exchangeBalances && exchangeBalances[1]}</p>
           </div>

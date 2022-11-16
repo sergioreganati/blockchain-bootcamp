@@ -133,7 +133,7 @@ export const priceChartSelector = createSelector(
 
         //last traded price
         let secondLastOrder, lastOrder
-        [secondLastOrder, lastOrder] = orders.slice(orders.lenght -2, orders.lenght) //get last two orders
+        [secondLastOrder, lastOrder] = orders.slice(-2) //get last two orders
 
         const lastPrice = get(lastOrder, 'tokenPrice', 0) 
         const secondLastPrice = get(secondLastOrder, 'tokenPrice', 0)

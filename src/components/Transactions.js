@@ -55,7 +55,7 @@ const Transactions = () => {
            <thead>
              <tr>
                <th>{symbols && symbols[0]}<img src={Sort} alt='Sort'/></th>
-               <th>{symbols && symbols[0]}/{symbols && symbols[1]}<img src={Sort} alt='Sort'/></th>
+               <th>{symbols && symbols[1]}/{symbols && symbols[0]}<img src={Sort} alt='Sort'/></th>
                <th></th>
              </tr>
            </thead>

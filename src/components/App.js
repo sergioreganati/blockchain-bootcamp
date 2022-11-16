@@ -59,9 +59,9 @@ function App() {
 
 
     //get Tokens contract
-    const dapp = config[chainId].DApp
+    const sdex = config[chainId].sDEX
     const meth = config[chainId].mETH
-    await loadTokens(provider, [dapp.address, meth.address], dispatch)
+    await loadTokens(provider, [sdex.address, meth.address], dispatch)
    
 
     //log Dapp symbol
