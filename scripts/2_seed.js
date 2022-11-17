@@ -121,17 +121,17 @@ async function main() {
 
     //Make open orders
 
-        //user1
+        //user1 buy orders for mEth
         for (let i = 1; i<= 10; i++){
-            transaction = await exchange.connect(user1).makeOrder(mETH.address, tokens(10 * i), Sdex.address, tokens(10))
+            transaction = await exchange.connect(user1).makeOrder(mETH.address, tokens(10), Sdex.address, tokens(10 * i))
             result = await transaction.wait()
             console.log(`Make order from ${user1.address}`)
             await wait(1)
         }
-        //user2
+        //user2 sell orders for mEth
 
-        for (let i = 1; i<= 10; i++){
-            transaction = await exchange.connect(user2).makeOrder(Sdex.address, tokens(10), mETH.address, tokens(10 * i))
+        for (let i = 10; i<= 20; i++){
+            transaction = await exchange.connect(user2).makeOrder(Sdex.address, tokens(10 * i), mETH.address, tokens(10))
             result = await transaction.wait()
             console.log(`Make order from ${user2.address}`)
             await wait(1)

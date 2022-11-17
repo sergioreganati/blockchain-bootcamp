@@ -86,7 +86,7 @@ useEffect(() => {
   return (
     <div>
       <Navbar />
-      <main className='exchange grid'>
+                  <main className='exchange grid'>
         <section className='exchange__section--left grid'>
 
           <Markets />
