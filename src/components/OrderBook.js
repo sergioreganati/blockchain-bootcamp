@@ -31,7 +31,7 @@ const OrderBook = () => {
           ) : (
           
           <table className='exchange__orderbook--sell'>
-            <caption>Selling</caption>
+            <caption>Selling {symbols && symbols[0]}</caption>
             <thead>
               <tr>
                 <th>{symbols && symbols[0]}<img src={sort} alt="Sort" /></th>
@@ -57,7 +57,7 @@ const OrderBook = () => {
           <div className='divider'></div>
   
           <table className='exchange__orderbook--buy'>
-            <caption>Buying</caption>
+            <caption>Buying {symbols && symbols[0]}</caption>
             <thead>
               <tr>
                 <th>{symbols && symbols[0]}<img src={sort} alt="Sort" /></th>

@@ -1,7 +1,7 @@
 import { useSelector } from "react-redux";
 import Banner from "./Banner";
 import Chart from "react-apexcharts";
-import { options, series } from './PriceChart.config.js';
+import { options } from './PriceChart.config.js';
 import { priceChartSelector } from "../store/selectors";
 import arrowDown from '../assets/down-arrow.svg';
 import arrowUp from '../assets/up-arrow.svg';
@@ -38,7 +38,7 @@ const PriceChart = () => {
         <Banner text={'Please connect your wallet'}/>
       ) : priceChart ? (
         <Chart 
-        series = {priceChart ? priceChart.series : series}
+        series = {priceChart ? priceChart.series : []}
         type='candlestick'
         width='100%'
         height='100%'

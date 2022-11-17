@@ -49,17 +49,15 @@ const decorateOrder = (order, tokens) => {
 const precision = 100000
 let tokenPrice = (token0Amount / token1Amount)
 tokenPrice = Math.round(tokenPrice * precision) / precision
-//let displayTokenPrice = ethers.utils.formatUnits(tokenPrice.toString(), 'ether')
     return ({
         ...order,
         token0Amount: ethers.utils.formatUnits(token0Amount, "ether"),
         token1Amount: ethers.utils.formatUnits(token1Amount, "ether"),
         tokenPrice: tokenPrice,
         displayTokenPrice: tokenPrice.toFixed(2),
-        formattedTimestamp: moment.unix(order.timeStamp).format('h:mm:ssa d MMM D'),
+        formattedTimestamp: moment.unix(order.timeStamp).format('HH:mm:ss D MMM YY'),
     })
 }
-
 //---------------------ORDERBOOK SELECTORS---------------------
 export const orderBookSelector = createSelector(
     openOrders, 
