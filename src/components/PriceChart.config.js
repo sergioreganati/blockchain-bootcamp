@@ -11,7 +11,7 @@ export const options = {
           zoom: true,
           zoomin: true,
           zoomout: true,
-          pan: true,
+          pan: false,
           reset: true | '<img src="/static/icons/reset.png" width="20">',
           customIcons: []
         },
@@ -70,7 +70,6 @@ export const options = {
         hideOverlapingLabels: false,
         trim: false,
         rotateAlways: false,
-        rotate: 45,
         show: true,
         style: {
           colors: '#767F92',

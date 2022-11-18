@@ -11,6 +11,16 @@ module.exports = {
     goerli: {
       url: `https://goerli.infura.io/v3/${process.env.INFURA_API_KEY}`,
       accounts:[privateKeys1.toString(), privateKeys2.toString()],
-  },
+    },
+    sepolia: {
+      url: `https://sepolia.infura.io/v3/${process.env.INFURA_API_KEY}`,
+      accounts:[privateKeys1.toString(), privateKeys2.toString()],
+    },
+    mumbai: {
+      url: `https://polygon-mumbai.g.alchemy.com/v2/${process.env.ALCHEMY_API_KEY}`,
+      accounts:[privateKeys1.toString(), privateKeys2.toString()],
+    },
+
+
 },
 }
