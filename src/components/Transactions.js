@@ -63,8 +63,8 @@ const Transactions = () => {
              {myOpenOrders && myOpenOrders.map((order, index) => {
                 return (
                   <tr key={index}>
-                    <td style={{color: `${order.orderTypeClass}`}}>{order.token1Amount}</td>
-                    <td>{order.tokenPrice}</td>
+                    <td style={{color: `${order.orderTypeClass}`}}>{order.displayToken1Amount}</td>
+                    <td>{order.displayTokenPrice}</td>
                     <td><button className='button--sm' onClick={() => {cancelHandler(order)}}>Cancel</button></td>
                   </tr>
                 );
@@ -95,8 +95,8 @@ const Transactions = () => {
               return (
                 <tr key={index}> 
                   <td>{order.formattedTimestamp}</td> 
-                  <td style={{color: `${order.orderClass}`}}>{order.orderSign}{order.token1Amount}</td> 
-                  <td>{order.tokenPrice}</td> 
+                  <td style={{color: `${order.orderClass}`}}>{order.orderSign}{order.displayToken1Amount}</td> 
+                  <td>{order.displayTokenPrice}</td> 
                 </tr> 
               )
             })}

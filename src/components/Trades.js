@@ -31,8 +31,8 @@ const Trades = () => {
             return (
               <tr key ={index}>
               <td>{order.formattedTimestamp}</td>
-              <td style={{color: `${order.tokenPriceClass}`}}>{order.token1Amount}</td>
-              <td>{order.tokenPrice}</td>
+              <td style={{color: `${order.tokenPriceClass}`}}>{order.displayToken1Amount}</td>
+              <td>{order.displayTokenPrice}</td>
             </tr>
             )
           })}

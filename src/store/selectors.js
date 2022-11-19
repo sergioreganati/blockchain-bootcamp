@@ -52,7 +52,10 @@ tokenPrice = Math.round(tokenPrice * precision) / precision
     return ({
         ...order,
         token0Amount: ethers.utils.formatUnits(token0Amount, "ether"),
+        //format displayToken0Amount so all numbers have the same decimal places
+        displayToken0Amount: parseFloat(ethers.utils.formatUnits(token0Amount, "ether")).toFixed(2),
         token1Amount: ethers.utils.formatUnits(token1Amount, "ether"),
+        displayToken1Amount: parseFloat(ethers.utils.formatUnits(token1Amount, "ether")).toFixed(2),
         tokenPrice: tokenPrice,
         displayTokenPrice: tokenPrice.toFixed(2),
         formattedTimestamp: moment.unix(order.timeStamp).format('HH:mm:ss D MMM YY'),
@@ -155,7 +158,7 @@ export const priceChartSelector = createSelector(
        
 
         // group orders by hour or day or...
-        orders = groupBy(orders, (o) => moment.unix(o.timeStamp).startOf('hour').format())
+        orders = groupBy(orders, (o) => moment.unix(o.timeStamp).startOf('day').format())
         // create array of the keys that we defined above (hour, day, week, month, year)
         const hours = Object.keys(orders)
         //build data as required by APEX CHARTS candles
@@ -323,9 +326,9 @@ export const filledOrdersSelector = createSelector(
 
         let orderType 
         if(myOrder) {
-            orderType = order.tokenGive === tokens[1].address ? 'buy' : 'sell'
+            orderType = order.tokenGive === tokens[0].address ? 'sell' : 'buy'
         } else {
-            orderType = order.tokenGive === tokens[1].address ? 'sell' : '`buy'
+            orderType = order.tokenGive === tokens[1].address ? 'buy' : '`sell'
         }
         order.orderType = orderType
         
@@ -333,8 +336,8 @@ export const filledOrdersSelector = createSelector(
         return ({
             ...order, 
             orderType, 
-            orderClass: (orderType === 'buy' ? GREEN : RED),
-            orderSign: (orderType === 'buy' ? '+' : '-')
+            orderClass: (orderType === 'buy' ? RED : GREEN),
+            orderSign: (orderType === 'buy' ? '-' : '+')
         })
         }
 

@@ -1,7 +1,6 @@
 import eth from '../assets/eth.svg';
 import cdex from '../assets/cdex.png';
 import { useSelector, useDispatch } from 'react-redux';
-import { useState } from 'react';
 import Blockies from 'react-blockies';
 import { loadAccount} from '../store/interations';
 import config from '../config.json';
@@ -13,7 +12,6 @@ const Navbar = () => {
     const etherBalance = useSelector((state) => state.provider.etherBalance);
     const dispatch = useDispatch();
     
-    let [network, setNetwork] = useState()
     
     const connectHandler = async () => {
       await loadAccount(provider, dispatch);
@@ -22,8 +20,6 @@ const Navbar = () => {
     
     const networkHandler = async (event) => {
       
-      //console.log(chainId);
-      //console.log(config[chainId]);
       try {
         await window.ethereum.request({
           method: 'wallet_switchEthereumChain',
@@ -32,12 +28,6 @@ const Navbar = () => {
             
           }],
         })
-        chainId.toString(16)
-        console.log(network);
-      //console.log(chainId);
-      //console.log(config[chainId]);
-      //console.log(chainId.toString(16))
-
       } catch (switchError) {
         if (switchError.code === 4902) {
           try {

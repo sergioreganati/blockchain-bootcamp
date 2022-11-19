@@ -43,9 +43,9 @@ const OrderBook = () => {
               {orderBook && orderBook.sellOrders.map((order, index) => {
                 return (
              <tr key={index} onClick={() => fillOrderHandler(order)}>
-               <td>{order.token1Amount}</td>
+               <td>{order.displayToken1Amount}</td>
                <td style={{color: `${order.orderTypeClass}`}}>{order.displayTokenPrice}</td>
-               <td>{order.token0Amount}</td>
+               <td>{order.displayToken0Amount}</td>
              </tr>
                 )
             })}
@@ -69,9 +69,9 @@ const OrderBook = () => {
               {orderBook && orderBook.buyOrders.map((order, index) => {
                 return (
                   <tr key={index} onClick={() => fillOrderHandler(order)}>
-                  <td>{order.token1Amount}</td>
+                  <td>{order.displayToken1Amount}</td>
                   <td style={{color: `${order.orderTypeClass}`}}>{order.displayTokenPrice}</td>
-                  <td>{order.token0Amount}</td>
+                  <td>{order.displayToken0Amount}</td>
                 </tr>
                   )    
               })}

@@ -29,3 +29,4 @@ npx hardhat run --network localhost scripts/2_seed.js
 npm start app.js
 localhost:3000
 
+git push -u origin main
