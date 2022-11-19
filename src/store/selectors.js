@@ -361,12 +361,21 @@ export const filledOrdersSelector = createSelector(
         const decorateMyFilledOrder = (order, account, tokens) => {
         //who created the order
         const myOrder = order.creator === account
+        console.log(myOrder)
 
-        let orderType 
-        if(myOrder) {
-            orderType = order.tokenGive === tokens[0].address ? 'sell' : 'buy'
+        var orderType 
+        if(myOrder) { 
+            if(order.tokenGive === tokens[1].address) {
+                orderType = 'buy'
+            } else {
+                orderType = 'sell'
+            }
         } else {
-            orderType = order.tokenGive === tokens[1].address ? 'buy' : '`sell'
+            if(order.tokenGive === tokens[1].address) {
+                orderType = 'sell'
+            } else {
+                orderType = 'buy'
+            }
         }
         order.orderType = orderType
         
@@ -374,8 +383,8 @@ export const filledOrdersSelector = createSelector(
         return ({
             ...order, 
             orderType, 
-            orderClass: (orderType === 'buy' ? RED : GREEN),
-            orderSign: (orderType === 'buy' ? '-' : '+')
+            orderClass: (orderType === 'buy' ? GREEN : RED),
+            orderSign: (orderType === 'buy' ? '+' : '-')
         })
         }
 
