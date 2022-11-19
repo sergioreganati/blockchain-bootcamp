@@ -118,10 +118,11 @@ export const orderBookSelector = createSelector(
 
 
 //-----------------------PRICE CHART SELECTORS-----------------------
-export const priceChartSelector = createSelector(
+export const priceChartSelectorHour = createSelector(
     filledOrders,
     tokens,
     (orders, tokens) => {
+        const time ='hour'
         //failsafe if there are no tokens loaded
         if(!tokens[0] || !tokens[1]) {return}
         //filter orders by selected tokens
@@ -145,7 +146,43 @@ export const priceChartSelector = createSelector(
             lastPrice: lastPrice,
             lastPriceChange: (lastPrice >= secondLastPrice ? 'up' : 'down'),
             series: [{
-                data: buildGraphData(orders)
+                data: buildGraphData(orders, time)
+            }]
+        })
+        
+
+        
+
+} )
+export const priceChartSelectorDay = createSelector(
+    filledOrders,
+    tokens,
+    (orders, tokens) => {
+        const time ='day'
+        //failsafe if there are no tokens loaded
+        if(!tokens[0] || !tokens[1]) {return}
+        //filter orders by selected tokens
+        orders = orders.filter((o) => o.tokenGet === tokens[0].address || o.tokenGet === tokens[1].address)
+        orders = orders.filter((o) => o.tokenGive === tokens[0].address || o.tokenGive === tokens[1].address)
+        orders = orders.sort((a, b) => a.timeStamp - b.timeStamp)
+        //decorate orders
+        orders = orders.map((o) => decorateOrder(o, tokens))
+
+
+        //last traded price
+        let secondLastOrder, lastOrder
+        [secondLastOrder, lastOrder] = orders.slice(-2) //get last two orders
+
+        const lastPrice = get(lastOrder, 'tokenPrice', 0) 
+        const secondLastPrice = get(secondLastOrder, 'tokenPrice', 0)
+        
+
+
+        return({
+            lastPrice: lastPrice,
+            lastPriceChange: (lastPrice >= secondLastPrice ? 'up' : 'down'),
+            series: [{
+                data: buildGraphData(orders, time)
             }]
         })
         
@@ -154,11 +191,12 @@ export const priceChartSelector = createSelector(
 
 } )
 
-    const buildGraphData = (orders) => {
+
+    const buildGraphData = (orders, time) => {
        
 
         // group orders by hour or day or...
-        orders = groupBy(orders, (o) => moment.unix(o.timeStamp).startOf('day').format())
+        orders = groupBy(orders, (o) => moment.unix(o.timeStamp).startOf(time).format())
         // create array of the keys that we defined above (hour, day, week, month, year)
         const hours = Object.keys(orders)
         //build data as required by APEX CHARTS candles
